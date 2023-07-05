@@ -1,0 +1,36 @@
+{
+    "ssl": {
+        "cert": "/etc/letsencrypt/live/shriki.org/fullchain.pem",
+        "key": "/etc/letsencrypt/live/shriki.org/privkey.pem",
+        "conf": [
+            ["Options", "Compression"],
+            ["min_protocol", "TLSv1.3"]
+        ]
+    },
+    "listeners": [
+        {
+        "address": "::",
+        "port": 80,
+        "https": false
+        },
+        {
+        "address": "::",
+        "port": 443,
+        "https": true,
+        "cert": "",
+        "key": ""
+        }
+    ],
+    "log": {
+        "log_path": "/var/log",
+        "logfile_base_name": "",
+        "log_size_limit": 100000000,
+        "log_level": "TRACE"
+    },
+  "app": {
+    "run_as_daemon": true,
+    "number_of_threads": 4,
+    "enable_session": false,
+    "document_root": "resources"
+  }
+}
