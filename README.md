@@ -1,2 +1,2 @@
 # org.shriki
-The webpage for org.shriki
+server binary and web app for shriki.org
