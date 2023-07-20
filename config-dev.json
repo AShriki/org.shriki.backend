@@ -10,12 +10,12 @@
     "listeners": [
         {
         "address": "::",
-        "port": 80,
+        "port": 8080,
         "https": false
         },
         {
         "address": "::",
-        "port": 443,
+        "port": 8443,
         "https": true,
         "cert": "",
         "key": ""
@@ -49,10 +49,5 @@
         "log_size_limit": 100000000,
         "log_level": "TRACE"
     }
-  },
-  "plugins": [
-        {
-            "name": "drogon::plugin::SecureSSLRedirector"
-        }
-    ]
+  }
 }

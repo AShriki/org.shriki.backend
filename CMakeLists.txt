@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(shriki.org.backend CXX)
+project(server CXX)
 
 include(CheckIncludeFileCXX)
 
@@ -21,6 +21,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 add_executable("${PROJECT_NAME}" main.cc)
+add_executable("${PROJECT_NAME}-dev" main-dev.cc)
 
 # ##############################################################################
 # If you include the drogon source code locally in your project, use this method
@@ -31,6 +32,7 @@ add_executable("${PROJECT_NAME}" main.cc)
 # and comment out the following lines
 find_package(Drogon CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE Drogon::Drogon)
+target_link_libraries("${PROJECT_NAME}-dev" PRIVATE Drogon::Drogon)
 set(VERBOSE 1)
 # ##############################################################################
 
@@ -39,6 +41,7 @@ if (CMAKE_CXX_STANDARD LESS 17)
     message(STATUS "use c++14")
     find_package(Boost 1.61.0 REQUIRED)
     target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost)
+    target_link_libraries("${PROJECT_NAME}-dev" PUBLIC Boost::boost)
 elseif (CMAKE_CXX_STANDARD LESS 20)
     message(STATUS "use c++17")
 else ()
@@ -52,6 +55,8 @@ aux_source_directory(models MODEL_SRC)
 
 drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
                     ${CMAKE_CURRENT_BINARY_DIR})
+drogon_create_views("${PROJECT_NAME}-dev" ${CMAKE_CURRENT_SOURCE_DIR}/views
+                    ${CMAKE_CURRENT_BINARY_DIR})
 # use the following line to create views with namespaces.
 # drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
 #                     ${CMAKE_CURRENT_BINARY_DIR} TRUE)
@@ -63,7 +68,17 @@ drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
 target_include_directories(${PROJECT_NAME}
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
                                    ${CMAKE_CURRENT_SOURCE_DIR}/models)
+target_include_directories("${PROJECT_NAME}-dev"
+                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+                                   ${CMAKE_CURRENT_SOURCE_DIR}/models)
 target_sources(${PROJECT_NAME}
+               PRIVATE
+               ${SRC_DIR}
+               ${CTL_SRC}
+               ${FILTER_SRC}
+               ${PLUGIN_SRC}
+               ${MODEL_SRC})
+target_sources("${PROJECT_NAME}-dev"
                PRIVATE
                ${SRC_DIR}
                ${CTL_SRC}
